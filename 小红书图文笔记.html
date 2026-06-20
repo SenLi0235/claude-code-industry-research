@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行业研究 Skill — 小红书图文笔记</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fefcf8;
+    --card-w: 360px;
+    --card-h: 480px;
+    --gap: 20px;
+    --radius: 24px;
+    --shadow: 0 4px 24px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+    background: #f5f0eb;
+    color: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 16px 80px;
+  }
+
+  /* Page title */
+  .page-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .page-header h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #78716c;
+    letter-spacing: .02em;
+  }
+  .page-header p {
+    font-size: .8rem;
+    color: #a8a29e;
+    margin-top: 4px;
+  }
+
+  /* Card grid */
+  .card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--gap);
+    max-width: 1180px;
+  }
+
+  /* Single card */
+  .card {
+    width: var(--card-w);
+    height: var(--card-h);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: transform .2s;
+  }
+  .card:hover { transform: translateY(-4px); }
+
+  /* Card 1 — Cover (dark accent) */
+  .card--cover {
+    background: linear-gradient(160deg, #1e293b 0%, #0f172a 100%);
+    color: #f1f5f9;
+    justify-content: center;
+  }
+  .card--cover .emoji-hero { font-size: 3.5rem; margin-bottom: 20px; text-align: center; }
+  .card--cover .tag-row { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; flex-wrap: wrap; }
+  .card--cover .tag {
+    font-size: .7rem;
+    padding: 4px 14px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.12);
+    color: #94a3b8;
+    letter-spacing: .03em;
+  }
+  .card--cover .title {
+    font-size: 1.7rem;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    letter-spacing: .01em;
+  }
+  .card--cover .title .hl { color: #fbbf24; }
+  .card--cover .subtitle {
+    font-size: .85rem;
+    color: #94a3b8;
+    text-align: center;
+    line-height: 1.5;
+  }
+  .card--cover .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin-top: 28px;
+  }
+  .card--cover .stat {
+    text-align: center;
+  }
+  .card--cover .stat-num {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fbbf24;
+  }
+  .card--cover .stat-label {
+    font-size: .65rem;
+    color: #64748b;
+    margin-top: 2px;
+  }
+
+  /* Card 2 — Pain (warm) */
+  .card--pain {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+  }
+  .card--pain .section-label {
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: #c2410c;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  .card--pain .pain-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .card--pain .pain-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: #fed7aa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .card--pain .pain-text strong { display: block; font-size: .95rem; margin-bottom: 2px; }
+  .card--pain .pain-text span { font-size: .78rem; color: #78716c; line-height: 1.5; }
+  .card--pain .verdict {
+    margin-top: auto;
+    text-align: center;
+    font-size: .9rem;
+    font-weight: 700;
+    color: #c2410c;
+  }
+
+  /* Card 3 — How it works (green) */
+  .card--how {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+  }
+  .card--how .section-label {
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: #15803d;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  .card--how .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .card--how .flow-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .card--how .step-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: #15803d;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .card--how .step-text { font-size: .85rem; line-height: 1.5; }
+  .card--how .step-text strong { color: #15803d; }
+  .card--how .output-row {
+    margin-top: auto;
+    display: flex;
+    gap: 10px;
+  }
+  .card--how .output-badge {
+    flex: 1;
+    text-align: center;
+    padding: 10px 8px;
+    border-radius: 12px;
+    font-size: .75rem;
+    font-weight: 600;
+  }
+  .card--how .output-badge--md { background: #fff; border: 2px solid #15803d; color: #15803d; }
+  .card--how .output-badge--html { background: #15803d; color: #fff; }
+
+  /* Card 4 — Feature (blue) */
+  .card--feature {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+  }
+  .card--feature .section-label {
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: #1d4ed8;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .card--feature h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.4;
+    color: #1e3a5f;
+  }
+  .card--feature .feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .card--feature .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .card--feature .feature-check {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    background: #1d4ed8;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .7rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .card--feature .feature-text { font-size: .82rem; line-height: 1.5; color: #334155; }
+  .card--feature .highlight-box {
+    margin-top: auto;
+    background: #dbeafe;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: .78rem;
+    color: #1e40af;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  /* Card 5 — Data channels (purple) */
+  .card--data {
+    background: #faf5ff;
+    border: 1px solid #e9d5ff;
+  }
+  .card--data .section-label {
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: #7c3aed;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .card--data h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    line-height: 1.4;
+    color: #4c1d95;
+  }
+  .card--data .channel-list { display: flex; flex-direction: column; gap: 12px; }
+  .card--data .channel-item {
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid #f3e8ff;
+  }
+  .card--data .channel-emoji { font-size: 1.4rem; flex-shrink: 0; }
+  .card--data .channel-info strong { display: block; font-size: .82rem; }
+  .card--data .channel-info span { font-size: .7rem; color: #78716c; }
+  .card--data .free-badge {
+    margin-left: auto;
+    font-size: .65rem;
+    background: #7c3aed;
+    color: #fff;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Card 6 — CTA (dark) */
+  .card--cta {
+    background: linear-gradient(160deg, #0f766e 0%, #115e59 100%);
+    color: #f0fdfa;
+    justify-content: center;
+    text-align: center;
+  }
+  .card--cta .cta-icon { font-size: 2.8rem; margin-bottom: 16px; }
+  .card--cta h3 { font-size: 1.35rem; font-weight: 700; margin-bottom: 12px; }
+  .card--cta .install-code {
+    background: rgba(0,0,0,.3);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-family: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
+    font-size: .7rem;
+    color: #5eead4;
+    margin: 16px 0;
+    text-align: left;
+    line-height: 1.6;
+    word-break: break-all;
+  }
+  .card--cta .tags { display: flex; gap: 8px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+  .card--cta .tag {
+    font-size: .7rem;
+    padding: 4px 14px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.12);
+    color: #99f6e4;
+  }
+
+  /* Print / screenshot mode */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .page-header { display: none; }
+    .card-grid { gap: 0; }
+    .card {
+      page-break-after: always;
+      box-shadow: none;
+      border-radius: 0;
+      width: 100vw;
+      height: 100vh;
+    }
+    .card:last-child { page-break-after: auto; }
+  }
+
+  /* Responsive: single column on narrow screens */
+  @media (max-width: 420px) {
+    .card { width: calc(100vw - 32px); height: auto; min-height: 440px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <h1>📱 小红书图文笔记预览</h1>
+  <p>6 张卡片 · 3:4 比例 · 可直接截图发布</p>
+</header>
+
+<div class="card-grid">
+
+  <!-- Card 1: Cover -->
+  <div class="card card--cover">
+    <div class="emoji-hero">📊</div>
+    <div class="tag-row">
+      <span class="tag">Claude Code</span>
+      <span class="tag">开源免费</span>
+      <span class="tag">MIT</span>
+    </div>
+    <div class="title">AI 一键<span class="hl">行业研究</span></div>
+    <div class="subtitle">投行级行研报告，Claude Code 全自动输出<br>Markdown + HTML 双格式</div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num">3</div><div class="stat-label">次确认</div></div>
+      <div class="stat"><div class="stat-num">7</div><div class="stat-label">大章节</div></div>
+      <div class="stat"><div class="stat-num">3</div><div class="stat-label">大数据源</div></div>
+    </div>
+  </div>
+
+  <!-- Card 2: Pain Points -->
+  <div class="card card--pain">
+    <div class="section-label">😣 行研三大痛</div>
+    <div class="pain-item">
+      <div class="pain-icon">🔍</div>
+      <div class="pain-text">
+        <strong>找数据找到头秃</strong>
+        <span>行业报告分散在 20+ 网站，数据口径打架不知道怎么选</span>
+      </div>
+    </div>
+    <div class="pain-item">
+      <div class="pain-icon">🤖</div>
+      <div class="pain-text">
+        <strong>AI 编数字不敢信</strong>
+        <span>让 ChatGPT 写行研，市场规模、市占率全是编的，没法用</span>
+      </div>
+    </div>
+    <div class="pain-item">
+      <div class="pain-icon">🎨</div>
+      <div class="pain-text">
+        <strong>排版丑没法交付</strong>
+        <span>Markdown 裸文本给老板/投资人看？太不专业了</span>
+      </div>
+    </div>
+    <div class="verdict">这些痛点，一个 Skill 全解决 ↓</div>
+  </div>
+
+  <!-- Card 3: How It Works -->
+  <div class="card card--how">
+    <div class="section-label">⚡ 三步出报告</div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="step-num">1</div>
+        <div class="step-text">输入 <strong>"研究一下光伏行业"</strong></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">2</div>
+        <div class="step-text">AI 自动四步闸门 → <strong>3 次审批窗口</strong>，关键决策你参与</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">3</div>
+        <div class="step-text">输出 <strong>完整行研报告</strong>，所有数据可溯源</div>
+      </div>
+    </div>
+    <div class="output-row">
+      <div class="output-badge output-badge--md">📝 Markdown 报告</div>
+      <div class="output-badge output-badge--html">🌐 HTML 网页报告</div>
+    </div>
+  </div>
+
+  <!-- Card 4: Key Features -->
+  <div class="card card--feature">
+    <div class="section-label">🛡️ 为什么可靠？</div>
+    <h3>不编数字 + 分段审批<br>+ 并发提速</h3>
+    <div class="feature-list">
+      <div class="feature-item">
+        <div class="feature-check">✓</div>
+        <div class="feature-text"><strong>[UNSOURCED] 标记</strong>：找不到可靠来源就老实标注，绝不捏造数据</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-check">✓</div>
+        <div class="feature-text"><strong>三段审批窗口</strong>：竞争格局和市场规模先看提纲再写正文，高风险板块重点审</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-check">✓</div>
+        <div class="feature-text"><strong>预分配编号段</strong>：4 个板块可并发写，速度翻倍</div>
+      </div>
+    </div>
+    <div class="highlight-box">
+      💡 核心原则：<strong>找不到源 → 标 [UNSOURCED]</strong>，不编数字是行研的底线
+    </div>
+  </div>
+
+  <!-- Card 5: Data Sources -->
+  <div class="card card--data">
+    <div class="section-label">🔬 三通道数据检索</div>
+    <h3>结构化金融 + 学术论文<br>检索通道免费</h3>
+    <div class="channel-list">
+      <div class="channel-item">
+        <div class="channel-emoji">🌐</div>
+        <div class="channel-info">
+          <strong>WebSearch</strong>
+          <span>国内政策 · 行业报告 · 公司新闻</span>
+        </div>
+        <div class="free-badge">内置免费</div>
+      </div>
+      <div class="channel-item">
+        <div class="channel-emoji">📈</div>
+        <div class="channel-info">
+          <strong>Wind 万得</strong>
+          <span>宏观指标 · 上市公司财务 · 行业统计</span>
+        </div>
+        <div class="free-badge">1000积分/天</div>
+      </div>
+      <div class="channel-item">
+        <div class="channel-emoji">📚</div>
+        <div class="channel-info">
+          <strong>Semantic Scholar</strong>
+          <span>学术论文 · 综述 · 引用分析</span>
+        </div>
+        <div class="free-badge">注册免费</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 6: CTA -->
+  <div class="card card--cta">
+    <div class="cta-icon">🚀</div>
+    <h3>一键安装</h3>
+    <div class="install-code">
+      cp -r 行业研究-skill/<br>~/.claude/skills/行业研究<br><br>
+      export S2_API_KEY="你的Key"
+    </div>
+    <p style="font-size:.8rem;color:#99f6e4;line-height:1.6;">
+      前置：Claude Code + Semantic Scholar API（免费注册）
+      <br>Wind 可选（每日送 1000 积分）
+    </p>
+    <div class="tags">
+      <span class="tag">#AI工具</span>
+      <span class="tag">#行业研究</span>
+      <span class="tag">#ClaudeCode</span>
+      <span class="tag">#投研效率</span>
+      <span class="tag">#开源</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
